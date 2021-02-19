@@ -34,3 +34,15 @@
   display: block;
   margin: -1rem 0 2rem;
 }
+
+.invalid-feedback {
+  color: #f00;
+  text-transform: capitalize;
+  position: absolute;
+  top: 40px;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 25px;
+}
