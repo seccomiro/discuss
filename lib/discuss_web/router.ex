@@ -16,7 +16,6 @@ defmodule DiscussWeb.Router do
   scope "/", DiscussWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
     get "/topics/new", TopicController, :new
     post "/topics", TopicController, :create
   end
