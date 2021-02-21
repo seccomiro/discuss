@@ -49,8 +49,7 @@ defmodule DiscussWeb.TopicController do
     end
   end
 
-  def destroy(conn, %{"id" => topic_id}) do
-    topic = Repo.get(Topic, topic_id)
+  def delete(conn, %{"id" => topic_id}) do
 
     case Repo.delete(topic) do
       {:ok, _topic} ->
