@@ -12,6 +12,11 @@ defmodule DiscussWeb.TopicController do
     render(conn, "index.html", topics: topics)
   end
 
+  def show(conn, %{"id" => topic_id}) do
+    topic = Repo.get!(Topic, topic_id)
+    render(conn, "show.html", topic: topic)
+  end
+
   def new(conn, _params) do
     changeset = Topic.changeset(%Topic{}, %{})
     render(conn, "new.html", changeset: changeset)
@@ -37,13 +42,13 @@ defmodule DiscussWeb.TopicController do
   end
 
   def edit(conn, %{"id" => topic_id}) do
-    topic = Repo.get(Topic, topic_id)
+    topic = Repo.get!(Topic, topic_id)
     changeset = Topic.changeset(topic)
     render(conn, "edit.html", changeset: changeset, topic: topic)
   end
 
   def update(conn, %{"id" => topic_id, "topic" => topic_params}) do
-    topic = Repo.get(Topic, topic_id)
+    topic = Repo.get!(Topic, topic_id)
     changeset = Topic.changeset(topic, topic_params)
 
     case Repo.update(changeset) do
@@ -75,7 +80,7 @@ defmodule DiscussWeb.TopicController do
 
   defp check_topic_owner(conn, _params) do
     %{params: %{"id" => topic_id}} = conn
-    topic = Repo.get(Topic, topic_id)
+    topic = Repo.get!(Topic, topic_id)
 
     if conn.assigns.user.id == topic.user_id do
       conn
