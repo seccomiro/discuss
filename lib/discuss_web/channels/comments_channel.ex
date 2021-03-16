@@ -1,13 +1,28 @@
 defmodule DiscussWeb.CommentsChannel do
   use DiscussWeb, :channel
 
-  def join(name, _params, socket) do
-    IO.puts("------------------")
-    IO.puts(name)
+  alias Discuss.{Topic, Comment, Repo}
 
-    {:ok, %{hey: "there"}, socket}
+  def join("comments:" <> topic_id, _params, socket) do
+    topic_id = String.to_integer(topic_id)
+    topic = Repo.get(Topic, topic_id)
+    {:ok, %{hey: "Welcome to #{topic.title}!"}, assign(socket, :topic, topic)}
   end
 
-  def handle_in do
+  def handle_in(_name, %{"content" => content}, socket) do
+    topic = socket.assigns.topic
+
+    changeset =
+      topic
+      |> Ecto.build_assoc(:comments)
+      |> Comment.changeset(%{content: content})
+
+    case Repo.insert(changeset) do
+      {:ok, _comment} ->
+        {:reply, :ok, socket}
+
+      {:error, _reason} ->
+        {:reply, {:error, %{erros: changeset}}, socket}
+    end
   end
 end
