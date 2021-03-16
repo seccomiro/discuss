@@ -1,5 +1,6 @@
 defmodule DiscussWeb.CommentsChannel do
   use DiscussWeb, :channel
+  use Phoenix.Channel
 
   alias Discuss.{Topic, Comment, Repo}
 
@@ -23,7 +24,8 @@ defmodule DiscussWeb.CommentsChannel do
       |> Comment.changeset(%{content: content})
 
     case Repo.insert(changeset) do
-      {:ok, _comment} ->
+      {:ok, comment} ->
+        broadcast!(socket, "comments:#{socket.assigns.topic.id}:new", %{comment: comment})
         {:reply, :ok, socket}
 
       {:error, _reason} ->

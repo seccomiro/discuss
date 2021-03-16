@@ -8,12 +8,14 @@ const createSocket = (topicId) => {
   let channel = socket.channel(`comments:${topicId}`, {});
   channel
     .join()
-    .receive("ok", (resp) => {
-      renderComments(resp.comments);
-    })
+    .receive("ok", (resp) => renderComments(resp.comments))
     .receive("error", (resp) => {
       console.log("Unable to join", resp);
     });
+
+  channel.on(`comments:${topicId}:new`, (event) =>
+    renderComment(event.comment)
+  );
 
   document.querySelector("#comment-form").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -22,15 +24,20 @@ const createSocket = (topicId) => {
   });
 };
 
-const renderComments = (comments) => {
-  const commentsHtml = comments.map(
-    (comment) => `
+const renderComments = (comments) =>
+  (document.querySelector("#comment-list").innerHTML = comments
+    .map(commentTemplate)
+    .join(""));
+
+const renderComment = (comment) =>
+  (document.querySelector("#comment-list").innerHTML += commentTemplate(
+    comment
+  ));
+
+const commentTemplate = (comment) => `
     <li class="collection-item">
       ${comment.content}
     </li>
-  `
-  );
-  document.querySelector("#comment-list").innerHTML = commentsHtml.join("");
-};
+  `;
 
 window.createSocket = createSocket;
