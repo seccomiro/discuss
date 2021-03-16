@@ -82,7 +82,7 @@ defmodule DiscussWeb.TopicController do
     %{params: %{"id" => topic_id}} = conn
     topic = Repo.get!(Topic, topic_id)
 
-    if conn.assigns.user.id == topic.user_id do
+    if conn.assigns.user && (conn.assigns.user.id == topic.user_id) do
       conn
     else
       conn
