@@ -9,7 +9,7 @@ const createSocket = (topicId) => {
   channel
     .join()
     .receive("ok", (resp) => {
-      console.log("Joined successfully", resp);
+      renderComments(resp.comments);
     })
     .receive("error", (resp) => {
       console.log("Unable to join", resp);
@@ -20,6 +20,17 @@ const createSocket = (topicId) => {
     const content = document.querySelector("#comment-content").value;
     channel.push("comment:add", { content });
   });
+};
+
+const renderComments = (comments) => {
+  const commentsHtml = comments.map(
+    (comment) => `
+    <li class="collection-item">
+      ${comment.content}
+    </li>
+  `
+  );
+  document.querySelector("#comment-list").innerHTML = commentsHtml.join("");
 };
 
 window.createSocket = createSocket;

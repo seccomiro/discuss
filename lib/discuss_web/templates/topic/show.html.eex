@@ -1,5 +1,6 @@
 <h1><%= @topic.title %></h1>
 
+<ul class="collection" id="comment-list"></ul>
 <div class="input-field">
   <form id="comment-form">
     <textarea id="comment-content" class="materialize-textarea"></textarea>
