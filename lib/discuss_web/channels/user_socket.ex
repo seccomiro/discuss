@@ -12,8 +12,6 @@ defmodule DiscussWeb.UserSocket do
       {:error, _error} ->
         :error
     end
-
-    {:ok, socket}
   end
 
   @impl true
