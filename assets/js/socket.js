@@ -37,6 +37,7 @@ const renderComment = (comment) =>
 const commentTemplate = (comment) => `
     <li class="collection-item">
       ${comment.content}
+      <div class="secondary-content">${comment.user?.email || "Anonymous"}</div>
     </li>
   `;
 
